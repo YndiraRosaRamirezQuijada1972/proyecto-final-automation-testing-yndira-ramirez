@@ -1,0 +1,18 @@
+# Cache de Python
+__pycache__/
+*.py[cod]
+ 
+# Cache de Pytest
+.pytest_cache/
+ 
+# Entornos virtuales
+venv/
+.venv/
+env/
+ 
+# Visual Studio Code
+.vscode/
+ 
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
