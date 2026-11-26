@@ -1,64 +1,37 @@
-from selenium.webdriver.common.by import By
- 
-from utils.helpers import crear_driver, realizar_login
- 
- 
-def test_inventory():
- 
-    driver = crear_driver()
-    
-    try:
-        realizar_login(driver)
-        
-        # Validar que nos encontramos en el inventario
-        assert "/inventory.html" in driver.current_url
-        
-        # Validar el título del navegador
-        assert driver.title == "Swag Labs"
-        
-        # Obtener todos los productos
-        productos = driver.find_elements(
-        By.CLASS_NAME,
-        "inventory_item"
-        )
-        
-        # Validar que exista al menos un producto
-        assert len(productos) > 0
-        
-        # Obtener el primer producto
-        primer_producto = productos[0]
-        
-        nombre = primer_producto.find_element(
-        By.CLASS_NAME,
-        "inventory_item_name"
-        ).text
-        
-        precio = primer_producto.find_element(
-        By.CLASS_NAME,
-        "inventory_item_price"
-        ).text
-        
-        # Mostrar nombre y precio en consola
-        print(f"Primer producto: {nombre}")
-        print(f"Precio: {precio}")
-        
-        # Validar que nombre y precio tengan contenido
-        assert nombre != ""
-        assert precio != ""
-        
-        # Validar elementos importantes de la interfaz
-        menu = driver.find_element(
-        By.ID,
-        "react-burger-menu-btn"
-        )
-        
-        filtro = driver.find_element(
-        By.CLASS_NAME,
-        "product_sort_container"
-        )
-        
-        assert menu.is_displayed()
-        assert filtro.is_displayed()
- 
-    finally:
-        driver.quit()
+from pages.login_page import LoginPage
+from pages.inventory_page import InventoryPage
+
+
+def test_inventory(driver):
+
+    login_page = LoginPage(driver)
+    inventory_page = InventoryPage(driver)
+
+    # Login
+    login_page.abrir()
+
+    login_page.login(
+        "standard_user",
+        "secret_sauce"
+    )
+
+    assert "/inventory.html" in driver.current_url
+    assert driver.title == "Swag Labs"
+
+    # Productos
+    productos = inventory_page.obtener_productos()
+
+    assert len(productos) > 0
+
+    nombre = inventory_page.obtener_nombre_primer_producto()
+    precio = inventory_page.obtener_precio_primer_producto()
+
+    print(f"Primer producto: {nombre}")
+    print(f"Precio: {precio}")
+
+    assert nombre != ""
+    assert precio != ""
+
+    # Elementos del inventario
+    assert inventory_page.menu_esta_visible()
+    assert inventory_page.filtro_esta_visible()
