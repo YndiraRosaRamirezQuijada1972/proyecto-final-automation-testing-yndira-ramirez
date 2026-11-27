@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import StaleElementReferenceException
 
 
 class CartPage:
@@ -35,13 +36,22 @@ class CartPage:
         )
 
     def obtener_nombres_productos(self):
-        productos = self.wait.until(
-            EC.presence_of_all_elements_located(
-                self.PRODUCTOS_CARRITO
-            )
-        )
 
-        return [
-            producto.text
-            for producto in productos
-        ]
+        def obtener_textos(driver):
+            try:
+                productos = driver.find_elements(
+                    *self.PRODUCTOS_CARRITO
+                )
+
+                nombres = [
+                    producto.text
+                    for producto in productos
+                    if producto.is_displayed()
+                ]
+
+                return nombres if nombres else False
+
+            except StaleElementReferenceException:
+                return False
+
+        return self.wait.until(obtener_textos)

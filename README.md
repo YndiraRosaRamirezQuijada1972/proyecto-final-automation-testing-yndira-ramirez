@@ -142,7 +142,7 @@ Cuando una prueba Web falla, el framework genera automáticamente una captura de
 Las capturas se almacenan en: screenshots/
 El nombre del archivo incluye el nombre del test y la fecha/hora de ejecución.
 
-Las evidencias también pueden incorporarse al reporte HTML generado por Pytest HTML.
+Cuando una prueba Web falla, la captura de pantalla generada automáticamente se incorpora como evidencia al reporte HTML de Pytest.
 
 
 
@@ -171,6 +171,12 @@ Duración de cada prueba.
 Detalle de los errores.
 Evidencias asociadas a fallos Web.
 
+
+Interpretación del reporte
+
+Cada prueba muestra su estado de ejecución. "Passed" indica que la prueba finalizó correctamente, mientras que "Failed" indica que se detectó un fallo.
+
+La duración permite identificar el tiempo empleado por cada caso de prueba. Ante una prueba Web fallida, el reporte muestra la información del error y la evidencia de la captura de pantalla generada automáticamente, facilitando el análisis y la depuración.
 
 
 Instalación
